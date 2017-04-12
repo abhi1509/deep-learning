@@ -13634,7 +13634,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[415]:</div>
+<div class="prompt input_prompt">In&nbsp;[422]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
@@ -13761,10 +13761,10 @@ div#notebook {
             <span class="n">delta_weight_hidden_to_output</span> <span class="o">+=</span> <span class="n">error_term_output</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span><span class="o">.</span><span class="n">T</span>
             <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">reviewIndices</span><span class="p">:</span>
                 <span class="n">delta_weight_inp_to_hidden</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+=</span> <span class="n">error_term_hidden</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_nodes</span><span class="p">,))</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">weights_0_1</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">*</span> <span class="n">delta_weight_inp_to_hidden</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="c1">#/ self.input_nodes</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weights_0_1</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">*</span> <span class="n">delta_weight_inp_to_hidden</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes</span>
             
             <span class="c1">#learnrate * error term / m</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weights_1_2</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">*</span> <span class="n">delta_weight_hidden_to_output</span> <span class="c1">#/ self.input_nodes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weights_1_2</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">*</span> <span class="n">delta_weight_hidden_to_output</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes</span>
 
             
             <span class="c1"># TODO: Keep track of correct predictions. To determine if the prediction was</span>
