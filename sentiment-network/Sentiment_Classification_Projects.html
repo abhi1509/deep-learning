@@ -13634,7 +13634,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[399]:</div>
+<div class="prompt input_prompt">In&nbsp;[415]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
@@ -13703,8 +13703,7 @@ div#notebook {
         <span class="c1"># Initialize weights</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights_0_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nodes</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_nodes</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights_1_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_nodes</span><span class="o">**-</span><span class="mf">0.5</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_nodes</span><span class="p">))</span>
-        <span class="c1">#self.layer_0 = np.zeros((1,input_nodes))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_nodes</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">hidden_nodes</span><span class="p">))</span>
     
     <span class="k">def</span> <span class="nf">get_target_for_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">label</span><span class="p">):</span>
         <span class="k">if</span><span class="p">(</span><span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;POSITIVE&quot;</span><span class="p">):</span>
@@ -13722,35 +13721,33 @@ div#notebook {
         <span class="c1"># make sure out we have a matching number of reviews and labels</span>
         <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">training_reviews_raw</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">training_labels</span><span class="p">))</span>
         
+        <span class="c1"># Keep track of correct predictions to display accuracy during training </span>
+        <span class="n">correct_so_far</span> <span class="o">=</span> <span class="mi">0</span>
+
         <span class="n">training_reviews</span>  <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">review</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">training_reviews_raw</span><span class="p">):</span>
             <span class="n">training_reviews_ind</span>  <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">review</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">):</span>
                 <span class="n">training_reviews_ind</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">word2index</span><span class="p">[</span><span class="n">word</span><span class="p">])</span>
             <span class="n">training_reviews</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">training_reviews_ind</span><span class="p">))</span>
-            
-        <span class="c1"># Keep track of correct predictions to display accuracy during training </span>
-        <span class="n">correct_so_far</span> <span class="o">=</span> <span class="mi">0</span>
         
         <span class="c1"># Remember when we started for printing time statistics</span>
         <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         
-        <span class="n">delta_weight_inp_to_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">weights_0_1</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-        <span class="n">delta_weight_hidden_to_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">weights_1_2</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        <span class="n">delta_weight_inp_to_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights_0_1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">delta_weight_hidden_to_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights_1_2</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        
         <span class="c1"># loop through all the given reviews and run a forward and backward pass,</span>
         <span class="c1"># updating weights for every item</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">training_reviews</span><span class="p">)):</span>
             
-            <span class="n">review</span> <span class="o">=</span> <span class="n">training_reviews</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">reviewIndices</span> <span class="o">=</span> <span class="n">training_reviews</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">label</span> <span class="o">=</span> <span class="n">training_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
             <span class="c1"># Implement the forward pass through the network. </span>
             <span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span> <span class="o">*=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">review</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights_0_1</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-            
-            <span class="c1">#hidden_layer_output = hidden_layer_input</span>
-            
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">reviewIndices</span><span class="p">:</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights_0_1</span><span class="p">[</span><span class="n">index</span>
+                                                  <span class="p">]</span>
             <span class="n">ouput_layer_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights_1_2</span><span class="p">))</span>
             
             <span class="c1"># Implement the back propagation pass here. </span>
@@ -13762,15 +13759,13 @@ div#notebook {
             <span class="n">error_term_hidden</span> <span class="o">=</span> <span class="n">error_hidden</span> <span class="o">*</span> <span class="mi">1</span> <span class="c1">#linear function. derivative of f(x) = x is 1</span>
             
             <span class="n">delta_weight_hidden_to_output</span> <span class="o">+=</span> <span class="n">error_term_output</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">reviewIndices</span><span class="p">:</span>
+                <span class="n">delta_weight_inp_to_hidden</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+=</span> <span class="n">error_term_hidden</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_nodes</span><span class="p">,))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weights_0_1</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">*</span> <span class="n">delta_weight_inp_to_hidden</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="c1">#/ self.input_nodes</span>
+            
+            <span class="c1">#learnrate * error term / m</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weights_1_2</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">*</span> <span class="n">delta_weight_hidden_to_output</span> <span class="c1">#/ self.input_nodes</span>
 
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">review</span><span class="p">:</span>
-                <span class="n">delta_weight_inp_to_hidden</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span> <span class="o">*</span> <span class="n">error_term_hidden</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_nodes</span><span class="p">,)</span>
-            
-            <span class="bp">self</span><span class="o">.</span><span class="n">weights_1_2</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">*</span> <span class="n">delta_weight_hidden_to_output</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes</span>
-            
-            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">review</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">weights_0_1</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">*</span> <span class="n">delta_weight_inp_to_hidden</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_nodes</span>
-            
             
             <span class="c1"># TODO: Keep track of correct predictions. To determine if the prediction was</span>
             <span class="c1">#       correct, check that the absolute value of the output error </span>
@@ -13793,7 +13788,6 @@ div#notebook {
             <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2500</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
             
-    
     <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">testing_reviews</span><span class="p">,</span> <span class="n">testing_labels</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Attempts to predict the labels for the given testing_reviews,</span>
@@ -13828,11 +13822,6 @@ div#notebook {
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a POSITIVE or NEGATIVE prediction for the given review.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># forward-pass</span>
-        <span class="c1"># self.update_input_layer(review.lower())</span>
-        
-        <span class="c1"># TODO: change the input to indices array</span>
-        
         <span class="n">test_reviews_ind</span>  <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">review</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">word2index</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -13845,7 +13834,6 @@ div#notebook {
             
         
         <span class="n">ouput_layer_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights_1_2</span><span class="p">))</span>
-        
         <span class="c1">#   Return `POSITIVE` for predictions greater-than-or-equal-to `0.5`, </span>
         <span class="c1">#   and `NEGATIVE` otherwise.</span>
         <span class="k">if</span><span class="p">(</span><span class="n">ouput_layer_output</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">):</span>
@@ -13871,7 +13859,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[400]:</div>
+<div class="prompt input_prompt">In&nbsp;[420]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">mlp</span> <span class="o">=</span> <span class="n">SentimentNetwork</span><span class="p">(</span><span class="n">reviews</span><span class="p">[:</span><span class="o">-</span><span class="mi">1000</span><span class="p">],</span><span class="n">labels</span><span class="p">[:</span><span class="o">-</span><span class="mi">1000</span><span class="p">],</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
@@ -13891,16 +13879,16 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Progress:0.0% Speed(reviews/sec):0.0 #Correct:1 #Trained:1 Training Accuracy:100.%
-Progress:5.12% Speed(reviews/sec):588.2 #Correct:615 #Trained:1230 Training Accuracy:50.0%Progress:10.4% Speed(reviews/sec):600.1 #Correct:1251 #Trained:2501 Training Accuracy:50.0%
-Progress:20.8% Speed(reviews/sec):590.8 #Correct:2501 #Trained:5001 Training Accuracy:50.0%
-Progress:31.2% Speed(reviews/sec):561.0 #Correct:3751 #Trained:7501 Training Accuracy:50.0%
-Progress:41.6% Speed(reviews/sec):565.9 #Correct:5001 #Trained:10001 Training Accuracy:50.0%
-Progress:52.0% Speed(reviews/sec):567.2 #Correct:6251 #Trained:12501 Training Accuracy:50.0%
-Progress:62.5% Speed(reviews/sec):565.8 #Correct:7501 #Trained:15001 Training Accuracy:50.0%
-Progress:72.9% Speed(reviews/sec):569.0 #Correct:8751 #Trained:17501 Training Accuracy:50.0%
-Progress:83.3% Speed(reviews/sec):563.8 #Correct:10001 #Trained:20001 Training Accuracy:50.0%
-Progress:93.7% Speed(reviews/sec):564.5 #Correct:11251 #Trained:22501 Training Accuracy:50.0%
-Progress:99.9% Speed(reviews/sec):567.2 #Correct:12000 #Trained:24000 Training Accuracy:50.0%</pre>
+Progress:10.4% Speed(reviews/sec):674.5 #Correct:1674 #Trained:2501 Training Accuracy:66.9%
+Progress:20.8% Speed(reviews/sec):623.3 #Correct:3426 #Trained:5001 Training Accuracy:68.5%
+Progress:31.2% Speed(reviews/sec):589.9 #Correct:5290 #Trained:7501 Training Accuracy:70.5%
+Progress:33.3% Speed(reviews/sec):583.1 #Correct:5670 #Trained:8003 Training Accuracy:70.8%Progress:41.6% Speed(reviews/sec):585.9 #Correct:7210 #Trained:10001 Training Accuracy:72.0%
+Progress:52.0% Speed(reviews/sec):594.3 #Correct:9122 #Trained:12501 Training Accuracy:72.9%
+Progress:62.5% Speed(reviews/sec):600.3 #Correct:10992 #Trained:15001 Training Accuracy:73.2%
+Progress:72.9% Speed(reviews/sec):602.5 #Correct:12874 #Trained:17501 Training Accuracy:73.5%
+Progress:83.3% Speed(reviews/sec):604.5 #Correct:14861 #Trained:20001 Training Accuracy:74.3%
+Progress:93.7% Speed(reviews/sec):607.0 #Correct:16797 #Trained:22501 Training Accuracy:74.6%
+Progress:99.9% Speed(reviews/sec):609.1 #Correct:17980 #Trained:24000 Training Accuracy:74.9%</pre>
 </div>
 </div>
 
@@ -13920,7 +13908,7 @@ Progress:99.9% Speed(reviews/sec):567.2 #Correct:12000 #Trained:24000 Training A
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[401]:</div>
+<div class="prompt input_prompt">In&nbsp;[421]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">mlp</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">reviews</span><span class="p">[</span><span class="o">-</span><span class="mi">1000</span><span class="p">:],</span><span class="n">labels</span><span class="p">[</span><span class="o">-</span><span class="mi">1000</span><span class="p">:])</span>
@@ -13938,7 +13926,7 @@ Progress:99.9% Speed(reviews/sec):567.2 #Correct:12000 #Trained:24000 Training A
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Progress:99.9% Speed(reviews/sec):1494. #Correct:500 #Tested:1000 Testing Accuracy:50.0%</pre>
+<pre>Progress:99.9% Speed(reviews/sec):1463. #Correct:772 #Tested:1000 Testing Accuracy:77.2%</pre>
 </div>
 </div>
 
